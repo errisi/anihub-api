@@ -1,7 +1,7 @@
 {
   "type": "module",
   "scripts": {
-    "start": "nodemon src/index.js",
+    "start": "nodemon src/server.ts",
     "format": "prettier src --write",
     "lint": "eslint . --ignore-path .gitignore --fix",
     "fix": "npm run format & npm run lint",
