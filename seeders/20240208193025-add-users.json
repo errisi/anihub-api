@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "desu",
+    "email": "anzsude@gmail.com",
+    "password": "1111",
+    "age": 10000,
+    "sex": null,
+    "about": null,
+    "role": {
+      "current": "admin",
+      "period": null
+    },
+    "friends": null,
+    "achievements": null,
+    "avatar": "1",
+    "wallpaper": "2",
+    "status": {
+      "current": "active",
+      "period": null
+    }
+  }
+]

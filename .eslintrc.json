@@ -3,10 +3,12 @@
     "browser": true,
     "es2021": true
   },
-  "extends": "@mate-academy/students-ts-config",
+  "extends": "typescript",
   "parserOptions": {
     "ecmaVersion": "latest",
     "sourceType": "module"
   },
-  "rules": {}
+  "rules": {
+    "no-extra-semi": "off"
+  }
 }
