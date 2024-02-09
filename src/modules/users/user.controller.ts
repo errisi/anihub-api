@@ -3,6 +3,9 @@ import * as userService from './user.service';
 import { Controller } from '../typedefs';
 import { isValidUserPostFields } from '../../helpers/isValidUserPostFields';
 import { isValidUserPatchFields } from '../../helpers/isValidUserPatchFields';
+import { emailService } from '../email/email.service';
+import { v4 as uuidv4 } from 'uuid';
+import { Users } from './user.model';
 
 export const get: Controller = async (req, res) => {
   const users = await userService.findAll();
@@ -61,18 +64,38 @@ export const create: Controller = async (req, res) => {
     return;
   }
 
+  const activationToken = uuidv4();
   const newUser = await userService.create(
     name,
     email,
     password,
+    activationToken,
     age,
     sex,
     about,
     avatarId,
   );
 
+  await emailService.sendActivationEmail(email, activationToken);
+
   res.status(201);
   res.send(newUser);
+};
+
+export const activate: Controller = async (req, res) => {
+  const { activationToken } = req.params;
+  const user = await Users.findOne({ where: { activationToken } });
+
+  if (!user) {
+    res.sendStatus(404);
+
+    return;
+  }
+
+  user.activationToken = null;
+  user.save();
+
+  res.send(user);
 };
 
 export const update: Controller = async (req, res) => {

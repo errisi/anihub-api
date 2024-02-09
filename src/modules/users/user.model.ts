@@ -94,4 +94,9 @@ export class Users extends Model {
     current: 'active' | 'limited' | 'blocked';
     period: string | null;
   };
+
+  @Column({
+    type: DataType.STRING,
+  })
+  activationToken: string | null;
 }

@@ -18,6 +18,7 @@
     "status": {
       "current": "active",
       "period": null
-    }
+    },
+    "activationToken": null
   }
 ]
