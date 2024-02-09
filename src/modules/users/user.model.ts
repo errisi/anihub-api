@@ -43,9 +43,9 @@ export class Users extends Model {
   password: string;
 
   @Column({
-    type: DataType.INTEGER,
+    type: DataType.STRING,
   })
-  age: number;
+  age: string;
 
   @Column({
     type: DataType.STRING,
