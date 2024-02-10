@@ -45,7 +45,7 @@ export class Users extends Model {
   @Column({
     type: DataType.STRING,
   })
-  age: string;
+  age: string | null;
 
   @Column({
     type: DataType.STRING,
@@ -55,7 +55,7 @@ export class Users extends Model {
   @Column({
     type: DataType.STRING,
   })
-  about: string;
+  about: string | null;
 
   @AllowNull(false)
   @Column({

@@ -19,6 +19,7 @@ export const normalize = ({
   avatar,
   wallpaper,
   status,
+  activationToken,
 }: Partial<Users>) => {
   return {
     id,
@@ -33,6 +34,7 @@ export const normalize = ({
     avatar,
     wallpaper,
     status,
+    activationToken,
   };
 };
 
