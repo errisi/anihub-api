@@ -6,6 +6,40 @@ export const findAll = async () => {
   return users;
 };
 
+export const normalize = ({
+  id,
+  name,
+  email,
+  age,
+  sex,
+  about,
+  role,
+  friends,
+  achievements,
+  avatar,
+  wallpaper,
+  status,
+}: Partial<Users>) => {
+  return {
+    id,
+    name,
+    email,
+    age,
+    sex,
+    about,
+    role,
+    friends,
+    achievements,
+    avatar,
+    wallpaper,
+    status,
+  };
+};
+
+export const findByEmail = (email: string) => {
+  return Users.findOne({ where: { email } });
+};
+
 export const findById = (id: number) => Users.findByPk(id);
 
 export const create = async (

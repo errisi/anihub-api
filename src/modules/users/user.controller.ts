@@ -1,11 +1,12 @@
 import * as userService from './user.service';
 
-import { Controller } from '../typedefs';
+import { Controller } from '../../typedefs';
 import { isValidUserPostFields } from '../../helpers/isValidUserPostFields';
 import { isValidUserPatchFields } from '../../helpers/isValidUserPatchFields';
 import { emailService } from '../email/email.service';
 import { v4 as uuidv4 } from 'uuid';
 import { Users } from './user.model';
+import { jwtService } from '../jwt/jwt.service';
 
 export const get: Controller = async (req, res) => {
   const users = await userService.findAll();
@@ -16,7 +17,7 @@ export const get: Controller = async (req, res) => {
     return;
   }
 
-  res.send(users);
+  res.send(users.map(userService.normalize));
 };
 
 export const getOne: Controller = async (req, res) => {
@@ -96,6 +97,27 @@ export const activate: Controller = async (req, res) => {
   user.save();
 
   res.send(user);
+};
+
+export const login: Controller = async (req, res) => {
+  const { email, password } = req.body;
+
+  const user = await userService.findByEmail(email);
+
+  if (!user || user.password !== password) {
+    res.sendStatus(401);
+
+    return;
+  }
+
+  const normalizedUser = userService.normalize(user);
+
+  const accessToken = jwtService.sign(normalizedUser);
+
+  res.send({
+    user: normalizedUser,
+    accessToken,
+  });
 };
 
 export const update: Controller = async (req, res) => {
