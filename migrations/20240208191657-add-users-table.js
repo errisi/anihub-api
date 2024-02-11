@@ -68,6 +68,9 @@ module.exports = {
       activationToken: {
         type: Sequelize.STRING,
       },
+      refreshToken: {
+        type: Sequelize.TEXT
+      }
     });
   },
 

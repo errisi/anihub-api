@@ -99,4 +99,9 @@ export class Users extends Model {
     type: DataType.STRING,
   })
   activationToken: string | null;
+
+  @Column({
+    type: DataType.TEXT,
+  })
+  refreshToken: string;
 }

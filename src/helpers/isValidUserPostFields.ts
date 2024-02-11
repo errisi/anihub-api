@@ -1,5 +1,3 @@
-import { isNumberValid } from './isNumberValid';
-
 export const isValidUserPostFields = (
   name: string,
   email: string,
@@ -7,7 +5,7 @@ export const isValidUserPostFields = (
   age: string | null,
   sex: 'm' | 'f' | null,
   about: string | null,
-  avatarId: number | null,
+  avatar: string | null,
 ) => {
   if (!name || name.trim().length <= 0 || typeof name !== 'string') {
     return false;
@@ -43,8 +41,8 @@ export const isValidUserPostFields = (
     }
   }
 
-  if (avatarId) {
-    if (!isNumberValid(avatarId)) {
+  if (avatar) {
+    if (typeof about !== 'string' && about !== null) {
       return false;
     }
   }

@@ -1,3 +1,4 @@
+import { ApiError } from '../../exeptions/api.error';
 import { Users } from './user.model';
 
 export const findAll = async () => {
@@ -52,8 +53,24 @@ export const create = async (
   age?: number | null,
   sex?: 'm' | 'f' | null,
   about?: string | null,
-  avatarId?: number | null,
+  avatar?: string | null,
 ) => {
+  const existingUserByName = await Users.findOne({ where: { name } });
+
+  if (existingUserByName) {
+    throw ApiError.alreadyExist('User alredy exist', {
+      name: 'name alredy exist',
+    });
+  }
+
+  const existingUserByEmail = await Users.findOne({ where: { email } });
+
+  if (existingUserByEmail) {
+    throw ApiError.alreadyExist('User alredy exist', {
+      email: 'User alredy exist',
+    });
+  }
+
   const filteredValues = {
     name,
     email,
@@ -62,7 +79,7 @@ export const create = async (
     age,
     sex,
     about,
-    avatarId,
+    avatar,
   };
 
   const validValues = Object.fromEntries(

@@ -7,6 +7,10 @@ import { emailService } from '../email/email.service';
 import { v4 as uuidv4 } from 'uuid';
 import { Users } from './user.model';
 import { jwtService } from '../jwt/jwt.service';
+import { ApiError } from '../../exeptions/api.error';
+import bcrypt from 'bcrypt';
+import { Response } from 'express';
+import { tokenService } from '../token/token.service';
 
 export const get: Controller = async (req, res) => {
   const users = await userService.findAll();
@@ -36,18 +40,7 @@ export const getOne: Controller = async (req, res) => {
 };
 
 export const create: Controller = async (req, res) => {
-  const { name, password, sex, email, about, age, avatarId } = req.body;
-
-  const users = await userService.findAll();
-
-  const existingUserByName = users.find((user) => user.get('name') === name);
-  const existingUserByEmail = users.find((user) => user.get('email') === email);
-
-  if (existingUserByName || existingUserByEmail) {
-    res.sendStatus(409);
-
-    return;
-  }
+  const { name, password, sex, email, about, age, avatar } = req.body;
 
   const isUserValid = isValidUserPostFields(
     name,
@@ -56,7 +49,7 @@ export const create: Controller = async (req, res) => {
     age,
     sex,
     about,
-    avatarId,
+    avatar,
   );
 
   if (!isUserValid) {
@@ -66,15 +59,16 @@ export const create: Controller = async (req, res) => {
   }
 
   const activationToken = uuidv4();
+  const hashedPass = await bcrypt.hash(password, 10);
   const newUser = await userService.create(
     name,
     email,
-    password,
+    hashedPass,
     activationToken,
     age,
     sex,
     about,
-    avatarId,
+    avatar,
   );
 
   await emailService.sendActivationEmail(email, activationToken);
@@ -104,16 +98,50 @@ export const login: Controller = async (req, res) => {
 
   const user = await userService.findByEmail(email);
 
-  if (!user || user.password !== password) {
-    res.sendStatus(401);
-
-    return;
+  if (!user) {
+    throw ApiError.badRequest('No such user', {});
   }
 
+  const isPasswordValid = bcrypt.compare(password, user.password);
+
+  if (!isPasswordValid) {
+    throw ApiError.badRequest('Wrong password', {});
+  }
+
+  await generateTokens(res, user);
+};
+
+export const refresh: Controller = async (req, res) => {
+  const { refreshToken } = req.cookies;
+
+  const user = jwtService.verifyRefresh(refreshToken);
+  const token = await tokenService.getByToken(refreshToken);
+
+  if (!user || !token) {
+    throw ApiError.unauthorized({});
+  }
+
+  await generateTokens(res, user as Users);
+};
+
+export const generateTokens = async (res: Response, user: Users) => {
   const normalizedUser = userService.normalize(user);
 
   const accessToken = jwtService.sign(normalizedUser);
+  const refreshToken = jwtService.signRefresh(normalizedUser);
 
+  if (typeof normalizedUser.id !== 'number') {
+    throw ApiError.badRequest('id is NaN', {});
+  }
+
+  await tokenService.save(normalizedUser.id!, refreshToken);
+
+  res.cookie('refreshToken', refreshToken, {
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    httpOnly: true,
+    sameSite: 'none',
+    secure: true,
+  });
   res.send({
     user: normalizedUser,
     accessToken,
