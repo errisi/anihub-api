@@ -9,8 +9,9 @@ import { Users } from './user.model';
 import { jwtService } from '../jwt/jwt.service';
 import { ApiError } from '../../exeptions/api.error';
 import bcrypt from 'bcrypt';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { tokenService } from '../token/token.service';
+import { s3Upload } from '../s3/s3.service';
 
 export const get: Controller = async (req, res) => {
   const users = await userService.findAll();
@@ -174,15 +175,24 @@ export const update: Controller = async (req, res) => {
     return;
   }
 
-  const users = await userService.findAll();
+  if (name) {
+    const existingUserByName = await Users.findOne({ where: { name } });
 
-  const existingUserByName = users.find((user) => user.get('name') === name);
-  const existingUserByEmail = users.find((user) => user.get('email') === email);
+    if (existingUserByName) {
+      res.sendStatus(409);
 
-  if (existingUserByName || existingUserByEmail) {
-    res.sendStatus(409);
+      return;
+    }
+  }
 
-    return;
+  if (email) {
+    const existingUserByEmail = await Users.findOne({ where: { email } });
+
+    if (existingUserByEmail) {
+      res.sendStatus(409);
+
+      return;
+    }
   }
 
   const isUserValid = isValidUserPatchFields(
@@ -222,6 +232,60 @@ export const update: Controller = async (req, res) => {
   });
 
   res.send(updatedUser);
+};
+
+const updateUserImage = async (
+  req: Request,
+  res: Response,
+  field: 'avatar' | 'wallpaper',
+) => {
+  const { id: idParams } = req.params;
+  const id = Number(idParams);
+
+  const user = await userService.findById(id);
+
+  if (!user) {
+    res.sendStatus(404);
+
+    return;
+  }
+
+  const files = req.files as Express.Multer.File[];
+
+  if (!files || files.length === 0) {
+    return res
+      .status(400)
+      .json({ status: 'error', message: 'No file uploaded' });
+  }
+
+  const image = files[0];
+
+  const result = await s3Upload(image);
+
+  switch (field) {
+    case 'avatar':
+      user.avatar = result.Location;
+      break;
+    case 'wallpaper':
+      user.wallpaper = result.Location;
+      break;
+    default:
+      return res
+        .status(400)
+        .json({ status: 'error', message: 'Invalid field' });
+  }
+
+  await user.save();
+
+  res.json({ status: 'success', result });
+};
+
+export const updateAvatar: Controller = async (req, res) => {
+  updateUserImage(req, res, 'avatar');
+};
+
+export const updateWallpaper: Controller = async (req, res) => {
+  updateUserImage(req, res, 'wallpaper');
 };
 
 export const remove: Controller = async (req, res) => {

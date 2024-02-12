@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import multer from 'multer';
 import { ApiError } from '../exeptions/api.error';
 
 export const errorMiddleware = (error: any, req: any, res: any, next: any) => {
@@ -7,11 +8,17 @@ export const errorMiddleware = (error: any, req: any, res: any, next: any) => {
       message: error.message,
       errors: error.errors,
     });
-  } else {
-    res.status(500).send({
-      message: `Server error: ${error}`,
+  }
+
+  if (error instanceof multer.MulterError) {
+    res.status(400).json({
+      message: error.message,
     });
   }
+
+  res.status(500).send({
+    message: `Server error: ${error}`,
+  });
 
   next();
 };
