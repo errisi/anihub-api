@@ -12,6 +12,7 @@ import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
 import { tokenService } from '../token/token.service';
 import { s3Upload } from '../s3/s3.service';
+import { v4 as uuid } from 'uuid';
 
 export const get: Controller = async (req, res) => {
   const users = await userService.findAll();
@@ -260,14 +261,17 @@ const updateUserImage = async (
 
   const image = files[0];
 
-  const result = await s3Upload(image);
+  const currentUuid = uuid();
+
+  const result = await s3Upload(image, currentUuid);
 
   switch (field) {
     case 'avatar':
-      user.avatar = result.Location;
+      user.avatar =
+        `https://anihub-s3-images.s3.eu-north-1.amazonaws.com/images/${currentUuid}-${image.originalname}`!;
       break;
     case 'wallpaper':
-      user.wallpaper = result.Location;
+      user.wallpaper = `https://anihub-s3-images.s3.eu-north-1.amazonaws.com/images/${currentUuid}-${image.originalname}`;
       break;
     default:
       return res
