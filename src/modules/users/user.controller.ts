@@ -304,3 +304,19 @@ export const remove: Controller = async (req, res) => {
 
   res.sendStatus(204);
 };
+
+export const logout: Controller = async (req, res) => {
+  const { refreshToken } = req.cookies;
+
+  const userData = await jwtService.verifyRefresh(refreshToken);
+
+  const user = userData as Users;
+
+  if (!user || !refreshToken) {
+    throw ApiError.unauthorized({});
+  }
+
+  await tokenService.remove(user.id);
+
+  res.sendStatus(204);
+};

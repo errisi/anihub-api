@@ -7,13 +7,15 @@ import {
   PrimaryKey,
   Column,
   Unique,
+  ForeignKey,
 } from 'sequelize-typescript';
+import { Users } from '../users/user.model';
 
 @Table({
-  tableName: 'collentions',
+  tableName: 'notifications',
   timestamps: true,
 })
-export class Collentions extends Model {
+export class Notifications extends Model {
   @AutoIncrement
   @AllowNull(false)
   @PrimaryKey
@@ -27,16 +29,17 @@ export class Collentions extends Model {
   @Column({
     type: DataType.STRING,
   })
-  name: string;
+  content: string;
 
   @AllowNull(false)
+  @Column({
+    type: DataType.STRING,
+  })
+  status: 'viewed' | 'not viewed';
+
+  @ForeignKey(() => Users)
   @Column({
     type: DataType.INTEGER,
   })
   userId: number;
-
-  @Column({
-    type: DataType.ARRAY(DataType.INTEGER),
-  })
-  animeIds: number[];
 }

@@ -10,6 +10,7 @@ userRouter.get('/', authMiddleware, catchError(userController.get));
 userRouter.get('/refresh', catchError(userController.refresh));
 userRouter.post('/register', catchError(userController.create));
 userRouter.post('/login', catchError(userController.login));
+userRouter.post('/logout', catchError(userController.logout));
 userRouter.get(
   '/activate/:activationToken',
   catchError(userController.activate),
