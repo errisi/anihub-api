@@ -127,7 +127,9 @@ export const refresh: Controller = async (req, res) => {
 };
 
 export const generateTokens = async (res: Response, user: Users) => {
-  const normalizedUser = userService.normalize(user);
+  const userFromDb = (await userService.findById(user.id)) || user;
+
+  const normalizedUser = userService.normalize(userFromDb);
 
   const accessToken = jwtService.sign(normalizedUser);
   const refreshToken = jwtService.signRefresh(normalizedUser);
@@ -137,6 +139,8 @@ export const generateTokens = async (res: Response, user: Users) => {
   }
 
   await tokenService.save(normalizedUser.id!, refreshToken);
+
+  console.log(normalizedUser);
 
   res.cookie('refreshToken', refreshToken, {
     maxAge: 30 * 24 * 60 * 60 * 1000,
