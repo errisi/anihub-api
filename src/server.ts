@@ -6,6 +6,7 @@ import { userRouter } from './modules/users/user.route';
 import { errorMiddleware } from './middlewares/errorMiddleware';
 import cookieParser from 'cookie-parser';
 import { notificationsRouter } from './modules/notifications/notifications.route';
+import { commentsRouter } from './modules/comments/comments.route';
 
 const server = async () => {
   const PORT = process.env.PORT || 5000;
@@ -24,6 +25,7 @@ const server = async () => {
 
   app.use('/users', express.json(), userRouter);
   app.use('/notifications', express.json(), notificationsRouter);
+  app.use('/comments', express.json(), commentsRouter);
 
   await connectToDb();
 

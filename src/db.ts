@@ -1,7 +1,7 @@
 import { Sequelize } from 'sequelize-typescript';
 import { Users } from './modules/users/user.model';
 import { Collentions } from './modules/collections/collection.model';
-import { Comments } from './modules/comments/comment.model';
+import { Comments } from './modules/comments/comments.model';
 import { Tokens } from './modules/token/token.model';
 import { Notifications } from './modules/notifications/notifications.model';
 

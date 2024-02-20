@@ -4,11 +4,5 @@
     "content": "test",
     "status": "not viewed",
     "userId": 1
-  },
-  {
-    "id": 2,
-    "content": "test",
-    "status": "not viewed",
-    "userId": null
   }
 ]

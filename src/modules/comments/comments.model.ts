@@ -6,7 +6,9 @@ import {
   AllowNull,
   PrimaryKey,
   Column,
+  ForeignKey,
 } from 'sequelize-typescript';
+import { Users } from '../users/user.model';
 
 @Table({
   tableName: 'comments',
@@ -23,24 +25,30 @@ export class Comments extends Model {
 
   @AllowNull(false)
   @Column({
-    type: DataType.STRING,
+    type: DataType.INTEGER,
   })
-  content: string;
+  animeId: number;
 
   @AllowNull(false)
+  @ForeignKey(() => Users)
   @Column({
     type: DataType.INTEGER,
   })
   ownerId: number;
 
-  @AllowNull(false)
   @Column({
     type: DataType.INTEGER,
   })
-  animeId: number;
+  commentId: number | null;
 
   @Column({
     type: DataType.INTEGER,
   })
-  repliedId: number | null;
+  repliedCommentId: number | null;
+
+  @AllowNull(false)
+  @Column({
+    type: DataType.STRING,
+  })
+  content: string;
 }
