@@ -1,14 +1,19 @@
 import express from 'express';
-import * as userController from './notifications.controller';
-import { authMiddleware } from '../../middlewares/authMiddleware';
+import * as notificationController from './notifications.controller';
+// import { authMiddleware } from '../../middlewares/authMiddleware';
 import { catchError } from '../../utils/catchError';
 
 const notificationsRouter = express.Router();
 
-notificationsRouter.get(
+notificationsRouter.post('/', catchError(notificationController.postForAll));
+
+notificationsRouter.patch('/:id', catchError(notificationController.update));
+
+notificationsRouter.post(
   '/:id',
-  authMiddleware,
-  catchError(userController.getByUserId),
+  catchError(notificationController.postByUserId),
 );
+
+notificationsRouter.get('/:id', catchError(notificationController.getByUserId));
 
 export { notificationsRouter };

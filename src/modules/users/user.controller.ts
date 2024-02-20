@@ -1,4 +1,5 @@
 import * as userService from './user.service';
+import * as NotificationsService from '../notifications/notifications.service';
 
 import { Controller } from '../../typedefs';
 import { isValidUserPostFields } from '../../helpers/isValidUserPostFields';
@@ -74,6 +75,11 @@ export const create: Controller = async (req, res) => {
   );
 
   await emailService.sendActivationEmail(email, activationToken);
+
+  await NotificationsService.create(
+    newUser.id,
+    `Рады приветствовать тебя, ${newUser.name}! Надеюсь тебе у нас понравится)`,
+  );
 
   res.status(201);
   res.send(newUser);
