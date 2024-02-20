@@ -3,12 +3,14 @@ import { Controller } from '../../typedefs';
 import { isNumberValid } from '../../helpers/isNumberValid';
 
 export const getAllByAnimeId: Controller = async (req, res) => {
-  const { id: idParams } = req.params;
-  const id = Number(idParams);
+  const { animeId: idParams } = req.params;
+  const animeId = Number(idParams);
 
-  const comments = await commentsService.findAllByAnimeId(id);
+  const comments = await commentsService.findAllByAnimeId(animeId);
 
   if (!comments.length) {
+    res.send([]);
+
     return;
   }
 
@@ -16,7 +18,10 @@ export const getAllByAnimeId: Controller = async (req, res) => {
 };
 
 export const create: Controller = async (req, res) => {
-  const { animeId, ownerId, commentId, repliedCommentId, content } = req.body;
+  const { animeId: idParams } = req.params;
+  const animeId = Number(idParams);
+
+  const { ownerId, commentId, repliedCommentId, content } = req.body;
 
   const isCommentValid = () => {
     if (!isNumberValid(animeId) || !isNumberValid(ownerId)) {

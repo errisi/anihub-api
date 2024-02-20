@@ -1,5 +1,5 @@
-import { Users } from '../users/user.model';
 import { Comments } from './comments.model';
+import * as userService from '../users/user.service';
 
 export const findById = (id: number) => Comments.findByPk(id);
 
@@ -10,14 +10,20 @@ export const findAllByAnimeId = async (animeId: number) => {
     },
   });
 
-  const comments = commentsFromDb.map((comment) => {
-    const user = Users.findByPk(comment.ownerId);
+  const comments = await Promise.all(
+    commentsFromDb.map(async (comment) => {
+      const user = await userService.findById(comment.ownerId);
 
-    return {
-      ...comment,
-      user,
-    };
-  });
+      const newComment = {
+        comment: comment.dataValues,
+        user,
+      };
+
+      console.log(newComment);
+
+      return newComment;
+    }),
+  );
 
   return comments;
 };
