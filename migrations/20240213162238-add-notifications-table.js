@@ -13,7 +13,7 @@ module.exports = {
         primaryKey: true,
       },
       content: {
-        type: Sequelize.STRING,
+        type: Sequelize.TEXT,
         allowNull: false,
       },
       status: {

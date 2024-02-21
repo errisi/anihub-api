@@ -27,7 +27,7 @@ export class Notifications extends Model {
   @AllowNull(false)
   @Unique(true)
   @Column({
-    type: DataType.STRING,
+    type: DataType.TEXT,
   })
   content: string;
 

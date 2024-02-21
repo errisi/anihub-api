@@ -48,7 +48,7 @@ export class Comments extends Model {
 
   @AllowNull(false)
   @Column({
-    type: DataType.STRING,
+    type: DataType.TEXT,
   })
   content: string;
 }

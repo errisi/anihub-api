@@ -36,7 +36,7 @@ export const create: Controller = async (req, res) => {
       return false;
     }
 
-    if (content.trim().length <= 0 || typeof content !== 'string') {
+    if (!content.trim().length || typeof content !== 'string') {
       return false;
     }
 
