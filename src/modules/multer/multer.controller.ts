@@ -1,5 +1,6 @@
 import { Controller } from '../../typedefs';
 import { s3Upload } from '../s3/s3.service';
+import { v4 as uuid } from 'uuid';
 
 export const uploadImage: Controller = async (req, res) => {
   const files = req.files as Express.Multer.File[];
@@ -12,7 +13,7 @@ export const uploadImage: Controller = async (req, res) => {
 
   const image = files[0];
 
-  const result = await s3Upload(image);
+  const result = await s3Upload(image, uuid());
 
   res.json({ status: 'success', result });
 };
