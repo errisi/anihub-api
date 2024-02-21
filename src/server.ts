@@ -18,7 +18,7 @@ const server = async () => {
 
   app.use(
     cors({
-      origin: [CLIENT_URL, 'https://anihub.icu'],
+      origin: [CLIENT_URL, 'https://anihub.icu', 'https://errisi.github.io'],
       credentials: true,
     }),
   );
