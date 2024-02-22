@@ -1,5 +1,5 @@
-import { Controller } from '../../typedefs';
-import * as NotificationsService from './notifications.service';
+import { Controller } from '../typedefs';
+import * as NotificationsService from '../services/notifications.service';
 
 export const getByUserId: Controller = async (req, res) => {
   const { id: idParams } = req.params;

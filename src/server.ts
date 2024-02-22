@@ -2,11 +2,11 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import { connectToDb } from './db';
-import { userRouter } from './modules/users/user.route';
+import { userRouter } from './routes/user.route';
 import { errorMiddleware } from './middlewares/errorMiddleware';
 import cookieParser from 'cookie-parser';
-import { notificationsRouter } from './modules/notifications/notifications.route';
-import { commentsRouter } from './modules/comments/comments.route';
+import { notificationsRouter } from './routes/notifications.route';
+import { commentsRouter } from './routes/comments.route';
 
 const server = async () => {
   const PORT = process.env.PORT || 5000;

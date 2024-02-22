@@ -8,7 +8,7 @@ import {
   Column,
   ForeignKey,
 } from 'sequelize-typescript';
-import { Users } from '../users/user.model';
+import { Users } from './user.model';
 
 @Table({
   tableName: 'comments',

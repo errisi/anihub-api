@@ -1,5 +1,5 @@
-import { Comments } from './comments.model';
-import * as userService from '../users/user.service';
+import { Comments } from '../models/comments.model';
+import * as userService from './user.service';
 
 export const findById = (id: number) => Comments.findByPk(id);
 

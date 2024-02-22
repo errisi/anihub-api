@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import 'dotenv/config';
-import { Users } from '../users/user.model';
+import { Users } from '../models/user.model';
 
 function sign(user: Partial<Users>) {
   const token = jwt.sign(user, process.env.JWT_KEY!, {

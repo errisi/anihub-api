@@ -1,18 +1,18 @@
-import * as userService from './user.service';
-import * as NotificationsService from '../notifications/notifications.service';
+import * as userService from '../services/user.service';
+import * as NotificationsService from '../services/notifications.service';
 
-import { Controller } from '../../typedefs';
-import { isValidUserPostFields } from '../../helpers/isValidUserPostFields';
-import { isValidUserPatchFields } from '../../helpers/isValidUserPatchFields';
-import { emailService } from '../email/email.service';
+import { Controller } from '../typedefs';
+import { isValidUserPostFields } from '../helpers/isValidUserPostFields';
+import { isValidUserPatchFields } from '../helpers/isValidUserPatchFields';
+import { emailService } from '../services/email.service';
 import { v4 as uuidv4 } from 'uuid';
-import { Users } from './user.model';
-import { jwtService } from '../jwt/jwt.service';
-import { ApiError } from '../../exeptions/api.error';
+import { Users } from '../models/user.model';
+import { jwtService } from '../services/jwt.service';
+import { ApiError } from '../exeptions/api.error';
 import bcrypt from 'bcrypt';
 import { Request, Response } from 'express';
-import { tokenService } from '../token/token.service';
-import { s3Upload } from '../s3/s3.service';
+import { tokenService } from '../services/token.service';
+import { s3Upload } from '../services/s3.service';
 import { v4 as uuid } from 'uuid';
 
 export const get: Controller = async (req, res) => {

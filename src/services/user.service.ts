@@ -1,5 +1,5 @@
-import { ApiError } from '../../exeptions/api.error';
-import { Users } from './user.model';
+import { ApiError } from '../exeptions/api.error';
+import { Users } from '../models/user.model';
 
 export const findAll = async () => {
   const users = await Users.findAll();

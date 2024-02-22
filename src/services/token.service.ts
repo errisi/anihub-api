@@ -1,4 +1,4 @@
-import { Tokens } from './token.model';
+import { Tokens } from '../models/token.model';
 
 async function save(userId: number, newToken: string) {
   const token = await Tokens.findOne({ where: { userId } });

@@ -1,4 +1,4 @@
-import { jwtService } from '../modules/jwt/jwt.service';
+import { jwtService } from '../services/jwt.service';
 import { Controller } from '../typedefs';
 
 export const authMiddleware: Controller = (req, res, next) => {

@@ -1,7 +1,7 @@
 import express from 'express';
-import * as notificationController from './notifications.controller';
+import * as notificationController from '../controllers/notifications.controller';
 // import { authMiddleware } from '../../middlewares/authMiddleware';
-import { catchError } from '../../utils/catchError';
+import { catchError } from '../utils/catchError';
 
 const notificationsRouter = express.Router();
 

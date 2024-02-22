@@ -1,6 +1,6 @@
-import * as commentsService from './comments.service';
-import { Controller } from '../../typedefs';
-import { isNumberValid } from '../../helpers/isNumberValid';
+import * as commentsService from '../services/comments.service';
+import { Controller } from '../typedefs';
+import { isNumberValid } from '../helpers/isNumberValid';
 
 export const getAllByAnimeId: Controller = async (req, res) => {
   const { animeId: idParams } = req.params;

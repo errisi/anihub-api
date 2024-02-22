@@ -1,5 +1,5 @@
-import { Users } from '../users/user.model';
-import { Notifications } from './notifications.model';
+import { Users } from '../models/user.model';
+import { Notifications } from '../models/notifications.model';
 import { Op } from 'sequelize';
 
 export const findByUserId = async (userId: number) => {

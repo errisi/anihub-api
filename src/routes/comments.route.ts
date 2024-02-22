@@ -1,6 +1,6 @@
 import express from 'express';
-import * as commentsController from './comments.controller';
-import { catchError } from '../../utils/catchError';
+import * as commentsController from '../controllers/comments.controller';
+import { catchError } from '../utils/catchError';
 
 const commentsRouter = express.Router();
 

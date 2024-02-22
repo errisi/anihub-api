@@ -2,20 +2,19 @@ import {
   DataType,
   Table,
   Model,
-  AutoIncrement,
   AllowNull,
-  PrimaryKey,
   Column,
-  Unique,
   ForeignKey,
+  AutoIncrement,
+  PrimaryKey,
 } from 'sequelize-typescript';
-import { Users } from '../users/user.model';
+import { Users } from './user.model';
 
 @Table({
-  tableName: 'notifications',
-  timestamps: true,
+  tableName: 'tokens',
+  timestamps: false,
 })
-export class Notifications extends Model {
+export class Tokens extends Model {
   @AutoIncrement
   @AllowNull(false)
   @PrimaryKey
@@ -25,17 +24,10 @@ export class Notifications extends Model {
   id: number;
 
   @AllowNull(false)
-  @Unique(true)
   @Column({
     type: DataType.TEXT,
   })
-  content: string;
-
-  @AllowNull(false)
-  @Column({
-    type: DataType.STRING,
-  })
-  status: 'viewed' | 'not viewed';
+  refreshToken: string;
 
   @ForeignKey(() => Users)
   @Column({

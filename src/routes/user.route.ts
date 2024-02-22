@@ -1,8 +1,8 @@
 import express from 'express';
-import * as userController from './user.controller';
-import { authMiddleware } from '../../middlewares/authMiddleware';
-import { catchError } from '../../utils/catchError';
-import { upload } from '../../middlewares/multerMiddleware';
+import * as userController from '../controllers/user.controller';
+import { authMiddleware } from '../middlewares/authMiddleware';
+import { catchError } from '../utils/catchError';
+import { upload } from '../middlewares/multerMiddleware';
 
 const userRouter = express.Router();
 
