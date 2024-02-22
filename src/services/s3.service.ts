@@ -1,7 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { Readable } from 'stream';
 
-export const s3Upload = async (image: any, uuid: any) => {
+interface UploadedImage {
+  originalname: string;
+  buffer: Buffer | Uint8Array | Blob | Readable | string;
+}
+
+export const s3Upload = async (image: UploadedImage, uuid: string) => {
   const s3 = new S3Client();
 
   const params = {

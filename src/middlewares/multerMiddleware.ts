@@ -1,13 +1,18 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import multer from 'multer';
+import { Request } from 'express';
+import multer, { MulterError } from 'multer';
 
 const storage = multer.memoryStorage();
 
-const fileFilter = (req: any, file: any, cb: any) => {
+const fileFilter = (
+  req: Request,
+  file: Express.Multer.File,
+  cb: multer.FileFilterCallback,
+) => {
   if (file.mimetype.split('/')[0] === 'image') {
     cb(null, true);
   } else {
-    cb(new multer.MulterError('LIMIT_UNEXPECTED_FILE'), false);
+    const error = new MulterError('LIMIT_UNEXPECTED_FILE');
+    cb(error);
   }
 };
 

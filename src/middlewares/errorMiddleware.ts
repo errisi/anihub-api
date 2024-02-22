@@ -1,8 +1,13 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import multer from 'multer';
+import { Request, Response, NextFunction } from 'express';
+import multer, { MulterError } from 'multer';
 import { ApiError } from '../exeptions/api.error';
 
-export const errorMiddleware = (error: any, req: any, res: any, next: any) => {
+export const errorMiddleware = (
+  error: Error | ApiError | MulterError,
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
   if (error instanceof ApiError) {
     res.status(error.status).send({
       message: error.message,
