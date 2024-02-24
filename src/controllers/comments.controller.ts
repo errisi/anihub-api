@@ -43,7 +43,7 @@ export const create: Controller = async (req, res) => {
     return true;
   };
 
-  if (!isCommentValid) {
+  if (!isCommentValid()) {
     res.sendStatus(422);
 
     return;
@@ -74,7 +74,7 @@ export const update: Controller = async (req, res) => {
     return;
   }
 
-  if (content.trim().length <= 0 || typeof content !== 'string') {
+  if (!content.trim().length || typeof content !== 'string') {
     res.sendStatus(422);
 
     return;

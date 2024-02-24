@@ -25,7 +25,7 @@ export function send({ email, subject, html }: Send) {
 }
 
 export function sendActivationEmail(email: string, token: string) {
-  const href = `${process.env.CLIENT_URL}/activate/${token}`;
+  const href = `${process.env.CLIENT_URL}/#/activate/${token}`;
 
   const html = `
   <h1>Активируйте свой аккаунт</h1>
@@ -35,7 +35,19 @@ export function sendActivationEmail(email: string, token: string) {
   send({ email, html, subject: 'Activate' });
 }
 
+export function sendResetPasswordEmail(email: string, token: string) {
+  const href = `${process.env.CLIENT_URL}/#/reset/${token}`;
+
+  const html = `
+  <h1>Сбросить пароль</h1>
+  <a href="${href}">${href}</a>
+  `;
+
+  send({ email, html, subject: 'Reset Password' });
+}
+
 export const emailService = {
   send,
   sendActivationEmail,
+  sendResetPasswordEmail,
 };

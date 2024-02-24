@@ -11,6 +11,14 @@ userRouter.get('/refresh', catchError(userController.refresh));
 userRouter.post('/register', catchError(userController.create));
 userRouter.post('/login', catchError(userController.login));
 userRouter.post('/logout', catchError(userController.logout));
+userRouter.post(
+  '/forgot-password',
+  catchError(userController.sendResetPasswordToken),
+);
+userRouter.post(
+  '/reset-password/:resetToken',
+  catchError(userController.resetPassword),
+);
 userRouter.get(
   '/activate/:activationToken',
   catchError(userController.activate),

@@ -119,6 +119,46 @@ export const login: Controller = async (req, res) => {
   await generateTokens(res, user);
 };
 
+export const sendResetPasswordToken: Controller = async (req, res) => {
+  const { email } = req.body;
+
+  const user = await userService.findByEmail(email);
+
+  if (!user) {
+    throw ApiError.badRequest('No such user', {});
+  }
+
+  const resetToken = uuidv4();
+
+  user.activationToken = resetToken;
+  user.save();
+
+  await emailService.sendResetPasswordEmail(email, resetToken);
+
+  res.sendStatus(200);
+};
+
+export const resetPassword: Controller = async (req, res) => {
+  const { resetToken } = req.params;
+  const { password } = req.body;
+
+  const user = await Users.findOne({ where: { activationToken: resetToken } });
+
+  if (!user) {
+    res.sendStatus(404);
+
+    return;
+  }
+
+  const hashedPass = await bcrypt.hash(password, 10);
+
+  user.activationToken = null;
+  user.password = hashedPass;
+  user.save();
+
+  res.send(user);
+};
+
 export const refresh: Controller = async (req, res) => {
   const { refreshToken } = req.cookies;
 
@@ -227,10 +267,12 @@ export const update: Controller = async (req, res) => {
     return;
   }
 
+  const hashedPass = await bcrypt.hash(password, 10);
+
   const updatedUser = await userService.update(id, {
     name,
     email,
-    password,
+    password: password ? hashedPass : undefined,
     age,
     sex,
     about,
@@ -241,6 +283,11 @@ export const update: Controller = async (req, res) => {
     friends,
     achievements,
   });
+
+  if (email) {
+    const activationToken = uuidv4();
+    await emailService.sendActivationEmail(email, activationToken);
+  }
 
   res.send(updatedUser);
 };
