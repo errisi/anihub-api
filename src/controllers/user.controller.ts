@@ -110,7 +110,7 @@ export const login: Controller = async (req, res) => {
     throw ApiError.badRequest('No such user', {});
   }
 
-  const isPasswordValid = bcrypt.compare(password, user.password);
+  const isPasswordValid = await bcrypt.compare(password, user.password);
 
   if (!isPasswordValid) {
     throw ApiError.badRequest('Wrong password', {});
