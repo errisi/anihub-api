@@ -267,7 +267,11 @@ export const update: Controller = async (req, res) => {
     return;
   }
 
-  const hashedPass = await bcrypt.hash(password, 10);
+  let hashedPass;
+
+  if (password) {
+    hashedPass = await bcrypt.hash(password, 10);
+  }
 
   const updatedUser = await userService.update(id, {
     name,
